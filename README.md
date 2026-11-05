@@ -1,0 +1,2 @@
+# antiJequi
+Yet another adblock.
