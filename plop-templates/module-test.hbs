@@ -1,0 +1,7 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { {{camelCase name}} } from "{{up path}}src/{{path}}{{kebabCase name}}.js";
+
+test("{{camelCase name}}", () => {
+  assert.equal(typeof {{camelCase name}}, "function");
+});
