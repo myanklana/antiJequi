@@ -1,0 +1,7 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { Conteudo } from "../../src/engine/conteudo.js";
+
+test("Conteudo", () => {
+  assert.equal(typeof Conteudo, "function");
+});

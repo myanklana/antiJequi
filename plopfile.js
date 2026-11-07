@@ -50,9 +50,21 @@ export default function (plop) {
   });
 
   plop.setGenerator("service", {
-    description: "application service logic",
-    prompts: [namePrompt("service")],
-    actions: withTest("", "service"),
+    description: "application component logic",
+    prompts: [
+      namePrompt("service"),
+      {
+        type: "input",
+        name: "path",
+        message: "subpasta (ex.: filters/net, vazio = direto em src):",
+        // "" fica "", "/filters/net/" vira "filters/net/" (com uma barra no fim)
+        filter: (value) => {
+          const dir = value.trim().replace(/^\/+|\/+$/g, "");
+          return dir ? `${dir}/` : "";
+        },
+      },
+    ],
+    actions: withTest("{{path}}", "component"),
   });
 
   plop.setGenerator("component", {
