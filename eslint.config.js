@@ -1,21 +1,24 @@
 import js from "@eslint/js";
 import globals from "globals";
+import tseslint from "typescript-eslint";
 
-export default [
+export default tseslint.config(
   { ignores: ["dist/", "node_modules/"] },
   js.configs.recommended,
   {
-    // Código da extensão: roda no navegador, com a API chrome.*
-    files: ["*.js", "popup/**/*.js"],
-    ignores: ["eslint.config.js", "plopfile.js"],
+    // Código da extensão (TypeScript): roda no navegador, com a API chrome.*
+    files: ["src/**/*.ts", "core/src/**/*.ts", "core/test/**/*.ts"],
+    extends: [tseslint.configs.recommended],
     languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: "script",
       globals: { ...globals.browser, ...globals.webextensions },
+    },
+    rules: {
+      // Parâmetros/variáveis começando com _ são intencionalmente não usados.
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
     },
   },
   {
-    // Módulos do core: rodam no navegador (importados pela extensão)
+    // Módulos do core ainda em JS (migração gradual para .ts)
     files: ["core/src/**/*.js"],
     languageOptions: {
       ecmaVersion: 2022,
@@ -24,12 +27,19 @@ export default [
     },
   },
   {
-    // Scripts de build, plopfile e testes: rodam no Node
-    files: ["scripts/**/*.js", "eslint.config.js", "plopfile.js", "core/test/**/*.js"],
+    // Testes: rodam no Node
+    files: ["core/test/**/*.ts", "core/test/**/*.js"],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+  {
+    // Scripts de build, plopfile e configs: rodam no Node
+    files: ["scripts/**/*.js", "eslint.config.js", "plopfile.js"],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",
       globals: globals.node,
     },
   },
-];
+);

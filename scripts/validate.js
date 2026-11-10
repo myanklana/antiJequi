@@ -1,10 +1,17 @@
-// Valida o manifest e as regras antes do build.
+// Valida a extensão gerada em dist/antiJequi (rode depois do build):
+// manifest, arquivos referenciados por ele e regras DNR.
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = fileURLToPath(new URL("..", import.meta.url));
+const projectRoot = fileURLToPath(new URL("..", import.meta.url));
+const root = join(projectRoot, "dist", "antiJequi");
 const errors = [];
+
+if (!existsSync(root)) {
+  console.error(`Build não encontrado em ${root}. Rode "npm run build" antes.`);
+  process.exit(1);
+}
 
 function readJson(rel) {
   try {
@@ -20,7 +27,13 @@ function mustExist(rel, origin) {
 }
 
 const manifest = readJson("manifest.json");
-const pkg = readJson("package.json");
+// package.json não vai para o build: lê da raiz do projeto.
+let pkg = null;
+try {
+  pkg = JSON.parse(readFileSync(join(projectRoot, "package.json"), "utf8"));
+} catch (e) {
+  errors.push(`package.json: JSON inválido (${e.message})`);
+}
 
 if (manifest) {
   if (manifest.manifest_version !== 3) errors.push("manifest.json: manifest_version deve ser 3");

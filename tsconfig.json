@@ -1,0 +1,27 @@
+{
+  // Só verifica tipos (npm run typecheck). Quem gera o .js é o esbuild (scripts/build.js).
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["chrome", "node"],
+
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Compatível com o "type stripping" do Node (testes rodam .ts direto):
+    // imports com extensão .ts, `import type` obrigatório e sem enum/namespace.
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+
+    // Permite migrar aos poucos: arquivos .js convivem com .ts sem serem checados.
+    "allowJs": true,
+    "checkJs": false
+  },
+  "include": ["src", "core/src", "core/test"]
+}

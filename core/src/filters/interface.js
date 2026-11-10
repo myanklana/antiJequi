@@ -1,3 +1,0 @@
-export function Interface() {
-  // TODO
-}

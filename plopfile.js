@@ -14,12 +14,12 @@ const namePrompt = (kind) => ({
 const withTest = (dir, template) => [
   {
     type: "add",
-    path: `${SRC}/${dir}{{kebabCase name}}.js`,
+    path: `${SRC}/${dir}{{kebabCase name}}.ts`,
     templateFile: `plop-templates/${template}.hbs`,
   },
   {
     type: "add",
-    path: `${TEST}/${dir}{{kebabCase name}}.test.js`,
+    path: `${TEST}/${dir}{{kebabCase name}}.test.ts`,
     templateFile: `plop-templates/${template}-test.hbs`,
   },
 ];
@@ -43,7 +43,7 @@ export default function (plop) {
     actions: [
       {
         type: "add",
-        path: `${SRC}/{{kebabCase name}}.js`,
+        path: `${SRC}/{{kebabCase name}}.ts`,
         templateFile: "plop-templates/controller.hbs",
       },
     ],

@@ -1,4 +1,8 @@
 // Content script: ocultação cosmética via CSS.
+// Atenção: é empacotado como IIFE (content scripts não suportam ES modules),
+// então pode importar de core/ normalmente — o esbuild junta tudo num arquivo só.
+
+import type { State } from "./messages.ts";
 
 const COSMETIC_SELECTORS = [
   "ins.adsbygoogle",
@@ -11,7 +15,7 @@ const COSMETIC_SELECTORS = [
   "[data-ad-slot]",
 ];
 
-chrome.storage.local.get("enabled").then(({ enabled = true }) => {
+chrome.storage.local.get<Partial<State>>("enabled").then(({ enabled = true }) => {
   if (!enabled) return;
 
   const style = document.createElement("style");

@@ -1,7 +1,9 @@
 //service para buscar os conteudos da pagina
 
 export class ContentFinderService {
-  constructor(blocoAnuncio) {
+  blocoAnuncio: ParentNode;
+  paginaHost: string;
+  constructor(blocoAnuncio:ParentNode) {
     this.blocoAnuncio = blocoAnuncio;
     this.paginaHost = location.hostname;
   }
@@ -12,22 +14,29 @@ export class ContentFinderService {
   }
 
   findContent() {
-    var retorno = [];
-    retorno = this.blocoAnuncio.querySelectorAll('iframe[src],img[src],script[src]').forEach((elemento) => {
-      retorno.push(elemento);
+    var retorno:Element[]= [];
+    this.blocoAnuncio.querySelectorAll('iframe[src],img[src],script[src]').forEach((elemento: Element) => {
+      
       let host;
       try{
-      host = new URL(elemento.src).hostname;
+      if(elemento.getAttribute('src') != null){
+      host = new URL(elemento.getAttribute('src')!).hostname;
+      retorno.push(elemento);
+      }
+      else{
+        throw new Error('Elemento sem src');
+      }
     } catch (error) {
-      return;
+      throw new Error('Erro ao obter o host do elemento: ' + error);
     }
     if(host === this.paginaHost || host.endsWith('.' + this.paginaHost)) return;
  
     });
     console.log(retorno);
+    return retorno;
   };
 
-sendContent(content) {
+sendContent(content:Element[]) {
   //envia o conteudo para o navegador
 
   content.forEach((elemento) => {
