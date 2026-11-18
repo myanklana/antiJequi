@@ -1,4 +1,4 @@
-import type FilterInterface from "../interfaces/filter-interface";
+import type FilterInterface from "../interfaces/filter-interface.ts";
 
 const _REGEX =
   /all|~third-party|~first-party|third-party|first-party|object-subrequest|stylesheet|subdocument|xmlhttprequest|document|generichide/g;

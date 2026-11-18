@@ -1,6 +1,6 @@
-import type FilterInterface from "../interfaces/filter-interface";
-import CosmeticFilter from "./cosmetic-filter";
-import NetworkFilter from "./network-filter";
+import type FilterInterface from "../interfaces/filter-interface.ts";
+import CosmeticFilter from "./cosmetic-filter.ts";
+import NetworkFilter from "./network-filter.ts";
 
 
 const marcadores = ['##','#@','##+','##^','##$','##~','##*','##%','##!','##?','##=','##-','##|','##&','###'];
