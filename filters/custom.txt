@@ -1,0 +1,7 @@
+! Regras próprias do antiJequi (sintaxe EasyList).
+! Convertidas junto com as listas por scripts/build-rules-block.ts.
+||doubleclick.net^
+||googlesyndication.com^
+||adservice.google.com^
+||taboola.com^
+||outbrain.com^

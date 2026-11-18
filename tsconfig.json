@@ -23,5 +23,5 @@
     "allowJs": true,
     "checkJs": false
   },
-  "include": ["src", "core/src", "core/test"]
+  "include": ["src", "core/src", "core/test", "scripts"]
 }

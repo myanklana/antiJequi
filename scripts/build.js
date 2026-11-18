@@ -1,15 +1,17 @@
 // Gera a extensão em dist/antiJequi:
 //   1. compila os .ts com esbuild (um bundle por entry point);
-//   2. copia os arquivos estáticos (manifest, regras, html, css).
+//   2. gera as regras DNR a partir de filters/*.txt (scripts/build-rules-block.ts);
+//   3. copia os arquivos estáticos (html, css) e grava o manifest.json com os rulesets.
 // A pasta gerada pode ser carregada em chrome://extensions ("Carregar sem compactação").
 //
 // Uso:
 //   node scripts/build.js           build de produção (minificado, sem source map)
 //   node scripts/build.js --watch   desenvolvimento: recompila ao salvar, com source map
 import * as esbuild from "esbuild";
-import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, statSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { buildRules } from "./build-rules-block.ts";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const out = join(root, "dist", "antiJequi");
@@ -24,9 +26,8 @@ const ENTRIES = {
 };
 
 // Arquivos copiados como estão: [origem, destino dentro de dist/antiJequi].
+// O manifest.json não está aqui: ele é gravado por writeManifest() com os rulesets.
 const STATIC = [
-  ["manifest.json", "manifest.json"],
-  ["rules", "rules"],
   ["src/popup/popup.html", "popup/popup.html"],
   ["src/popup/popup.css", "popup/popup.css"],
   ["LICENSE", "LICENSE"],
@@ -44,10 +45,18 @@ function copy(src, dest) {
   }
 }
 
+// manifest.json da raiz + "declarative_net_request" com os rulesets gerados.
+function writeManifest() {
+  const manifest = JSON.parse(readFileSync(join(root, "manifest.json"), "utf8"));
+  manifest.declarative_net_request = { rule_resources: ruleResources };
+  writeFileSync(join(out, "manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
+}
+
 function copyStatic() {
   for (const [src, dest] of STATIC) {
     if (existsSync(join(root, src))) copy(join(root, src), join(out, dest));
   }
+  writeManifest();
 }
 
 /** @type {esbuild.BuildOptions} */
@@ -67,6 +76,8 @@ const options = {
 
 rmSync(join(root, "dist"), { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
+// As regras são geradas uma vez por build (no --watch, reinicie para regerar).
+const ruleResources = buildRules(out);
 copyStatic();
 
 if (watch) {

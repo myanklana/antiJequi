@@ -28,5 +28,8 @@
     "plop": "^4.0.5",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }

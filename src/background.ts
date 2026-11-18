@@ -2,7 +2,9 @@
 
 import type { Message, State } from "./messages.ts";
 
-const RULESET_ID = "default_rules";
+// Todos os rulesets declarados no manifest (gerados por scripts/build-rules-block.ts).
+const RULESET_IDS = (chrome.runtime.getManifest().declarative_net_request?.rule_resources ?? [])
+  .map((r) => r.id);
 
 chrome.runtime.onInstalled.addListener(async () => {
   const { enabled } = await chrome.storage.local.get("enabled");
@@ -14,8 +16,8 @@ chrome.runtime.onInstalled.addListener(async () => {
 async function setEnabled(enabled: boolean): Promise<void> {
   await chrome.declarativeNetRequest.updateEnabledRulesets(
     enabled
-      ? { enableRulesetIds: [RULESET_ID] }
-      : { disableRulesetIds: [RULESET_ID] }
+      ? { enableRulesetIds: RULESET_IDS }
+      : { disableRulesetIds: RULESET_IDS }
   );
   await chrome.storage.local.set({ enabled });
 }
