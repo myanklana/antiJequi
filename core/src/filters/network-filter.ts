@@ -1,6 +1,6 @@
 import type FilterInterface from "../interfaces/filter-interface";
 
-const REGEX =
+const _REGEX =
   /all|~third-party|~first-party|third-party|first-party|object-subrequest|stylesheet|subdocument|xmlhttprequest|document|generichide/g;
 
 
@@ -26,7 +26,7 @@ export default class NetworkFilter implements FilterInterface {
   
 
 
-  public getFilters(): Number[] {
+  public getFilters(): number[] {
     return [this.getId()];
   }
 }

@@ -6,7 +6,7 @@ import NetworkFilter from "./network-filter";
 const marcadores = ['##','#@','##+','##^','##$','##~','##*','##%','##!','##?','##=','##-','##|','##&','###'];
 
 
-function defineFilter(text: string): NetworkFilter | CosmeticFilter | string {
+function _defineFilter(text: string): NetworkFilter | CosmeticFilter | string {
 
   text = text.trim();
 

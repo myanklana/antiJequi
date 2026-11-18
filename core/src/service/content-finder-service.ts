@@ -14,7 +14,7 @@ export class ContentFinderService {
   }
 
   findContent() {
-    var retorno:Element[]= [];
+    const retorno:Element[]= [];
     this.blocoAnuncio.querySelectorAll('iframe[src],img[src],script[src]').forEach((elemento: Element) => {
       
       let host;
